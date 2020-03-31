@@ -9,6 +9,7 @@ public class SummaryActivity extends AppCompatActivity implements ComunicacionTC
 
     private ComunicacionTCP comunicacionTcp;
     private ListView listaRegistro;
+    private CustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +20,22 @@ public class SummaryActivity extends AppCompatActivity implements ComunicacionTC
         comunicacionTcp = ComunicacionTCP.getInstance();
         comunicacionTcp.setObserver(this);
         comunicacionTcp.mandarMensaje("list");
+        adapter = new CustomAdapter();
+        listaRegistro.setAdapter(adapter);
     }
 
     @Override
     public void onMessage(String mensaje) {
-        runOnUiThread(
+        /*runOnUiThread(
                 () -> {
                     Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
                 }
-        );
+        );*/
+        String[] registrosServidor = mensaje.split(",");
+        String nombre = registrosServidor[0];
+        String cedula = registrosServidor[1];
+
+        RegistroAdapter registro = new RegistroAdapter(nombre, cedula);
+        adapter.agregarRegistro(registro);
     }
 }

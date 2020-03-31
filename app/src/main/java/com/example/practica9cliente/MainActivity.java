@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +29,18 @@ public class MainActivity extends AppCompatActivity {
         registrarBtn = findViewById(R.id.registrarBtn);
 
         registrarBtn.setOnClickListener(
-                (v)-> {
-                    comunicacionTcp.mandarMensaje("reg," + nombreText.getText().toString() + "," + cedulaText.getText().toString());
-                    Intent i = new Intent(MainActivity.this, SummaryActivity.class);
-                    startActivity(i);
+                (v) -> {
+                    if (!nombreText.getText().toString().equals("") && !cedulaText.getText().toString().equals("")) {
+                        comunicacionTcp.mandarMensaje("reg," + nombreText.getText().toString() + "," + cedulaText.getText().toString());
+                        Intent i = new Intent(MainActivity.this, SummaryActivity.class);
+                        startActivity(i);
+                    } else {
+                        runOnUiThread(
+                                () -> {
+                                    Toast.makeText(this, "Completa los campos", Toast.LENGTH_SHORT).show();
+                                }
+                        );
+                    }
                 }
         );
     }

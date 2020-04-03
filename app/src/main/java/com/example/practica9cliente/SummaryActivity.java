@@ -1,9 +1,12 @@
 package com.example.practica9cliente;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 public class SummaryActivity extends AppCompatActivity implements ComunicacionTCP.OnMessageListener {
 
@@ -25,13 +28,15 @@ public class SummaryActivity extends AppCompatActivity implements ComunicacionTC
     }
 
     @Override
-    public void onMessage(String mensaje) {
-        String[] registrosServidor = mensaje.split(",");
-        String nombre = registrosServidor[0];
-        String cedula = registrosServidor[1];
+    public void onMessage(String json) {
 
-        RegistroAdapter nuevoRegistro = new RegistroAdapter(nombre, cedula);
-        adapter.agregarRegistro(nuevoRegistro);
+        Gson gson = new Gson();
+        RegistroAdapter[] registros = gson.fromJson(json, RegistroAdapter[].class);
+
+        for (int i = 0; i < registros.length; i++) {
+            adapter.agregarRegistro(registros[i]);
+        }
 
     }
+
 }

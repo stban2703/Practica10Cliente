@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText nombreText;
@@ -31,9 +33,19 @@ public class MainActivity extends AppCompatActivity {
         registrarBtn.setOnClickListener(
                 (v) -> {
                     if (!nombreText.getText().toString().equals("") && !cedulaText.getText().toString().equals("")) {
-                        comunicacionTcp.mandarMensaje("reg," + nombreText.getText().toString() + "," + cedulaText.getText().toString());
+
+                        String nombre = nombreText.getText().toString();
+                        String cedula = cedulaText.getText().toString();
+                        RegistroAdapter registro = new RegistroAdapter(nombre, cedula);
+
+                        Gson gson = new Gson();
+                        String json = gson.toJson(registro);
+
+                        comunicacionTcp.mandarMensaje(json);
+
                         Intent i = new Intent(MainActivity.this, SummaryActivity.class);
                         startActivity(i);
+
                     } else {
                         runOnUiThread(
                                 () -> {

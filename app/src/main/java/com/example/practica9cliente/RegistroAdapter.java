@@ -10,6 +10,10 @@ public class RegistroAdapter {
         this.cedula = cedula;
     }
 
+    public RegistroAdapter() {
+        //Requerimiento para el Gson ->  Json de Google
+    }
+
     public String getNombre() {
         return nombre;
     }
